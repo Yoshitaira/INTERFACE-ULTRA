@@ -17,7 +17,7 @@ class Sistema():
         self.tela_padrao()
         create_user_table()
         self.softwares = [
-            "7zip","Adobe Reader","Bullzip","Chrome","DesignReview",
+            "7zip","Adobe","Bullzip","Chrome","DesignReview",
             "DWGTruView","Earth","Easy2","FortiClient","FoxitReader",
             "Java","Lightshot","NextCloud","OwnCloud","PDFSam",
             "QGIS","RocketChat","Teams","TrimbleConnect","Zoom"
@@ -145,6 +145,7 @@ class Sistema():
         #user_id = get_user_id(username) # Obtém o nome de usuário da tela de login
         user_files = get_user_files(username)  # Recupera os arquivos do banco de dados
         print(f"User files retrieved: {user_files}")
+        #user_files = [file.strip().lower() for file in get_user_files(username)]
 
         user_label = ttk.Label(self.frame_user, font=("Helvetica", 18), text=f"Management panel for {username}")
         user_label.grid(row=0, column=0, columnspan=2, pady=10)
@@ -168,7 +169,7 @@ class Sistema():
         button_frame = ttk.Frame(self.frame_user)
         button_frame.grid(row=3+10, column=0,sticky=W, columnspan=3, pady=20)
 
-        download_button = ttk.Button(button_frame, text="Install", bootstyle="primary", command=lambda: install_selected(self.softwares, self.check_vars))
+        download_button = ttk.Button(button_frame, text="Install", bootstyle="primary", command=lambda: install_selected(user_files, self.check_vars))
         download_button.pack(side=LEFT, padx=10)
 
         uninstall_button = ttk.Button(button_frame, text="Uninstall", bootstyle="danger")

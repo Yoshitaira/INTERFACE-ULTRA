@@ -1,5 +1,6 @@
 import hashlib
 import subprocess
+import os
 # Básicos
 #import sqlite3
 from databaset import *
@@ -32,15 +33,13 @@ def user_register(username, password, filenames):
     else:
         messagebox.showerror("Error", "Fill in all fields.")
 
-
 def  get_selected_files(check_vars, softwares):
     """Retorna uma lista de arquivos correspondentes aos checkboxes marcados."""
     selected_files = []
     for var, software in zip(check_vars, softwares):
         if var.get():
-            selected_files.append(software+".ps1")
+            selected_files.append(software)
     return selected_files
-
 
 #--------------------------------------- Login do usuário -------------------------------------
 def verify_user(username, password):
@@ -64,27 +63,39 @@ software_scripts ={
     "DesignReview": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\DesignReview.ps1",
     "DWGTrueView": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\DWGTrueView.ps1",
     "Earth": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Earth.ps1",
+    "Easy2": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Easy2.ps1",
+    "FortiClient": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\FortiClient.ps1",
+    "FoxitReader": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\FoxitReader.ps1",
     "Java": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Java.ps1",
     "Lightshot": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Lightshot.ps1",
     "NextCloud": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\NextCloud.ps1",
+    "OwnCloud": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\OwnCloud.ps1",
     "PDFSam": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\PDFSam.ps1",
-    "QGIS": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\QGIS.ps1"  
+    "QGIS": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\QGIS.ps1",
+    "RocketChat": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\RocketChat.ps1",
+    "Teams": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Teams.ps1",
+    "TrimbleConnect": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\TrimbleConnect.ps1",
+    "Zomm": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Zoom.ps1",
 }
 
 # Função para executar os scripts do PowerShell
 def run_power_shell_scripts(selected_softwares):
+    print(f"Available scripts: {list(software_scripts.keys())}")
     for software in selected_softwares:
+        #normalized_software = software.strip().lower()
         script_path = software_scripts.get(software)
+        print(f"Checking script for: {software}")
         if not script_path:
             messagebox.showwarning("Warning", f"No script found for {software}.")
             continue
         try:
             print(f"Executando script: {script_path}")
-            result = subprocess.run(["powershell.exe", "-ExecutionPolicy", "Bypass", "-File", script_path], check=True, capture_output=True, text=True)
-            print(result.stdout)  # Mostra a saída do script
+            command = f"Start-Process powershell.exe -ArgumentList '-ExecutionPolicy Bypass -File \"{script_path}\"' -Verb RunAs"
+            result = subprocess.run(["powershell.exe", "-Command", command], check=True, capture_output=True, text=True)
+            print(result.stdout)
             messagebox.showinfo("Success", f"Script for {software} executed successfully!")
         except subprocess.CalledProcessError as e:
-            print(f"Erro: {e.stderr}")  # Mostra o erro do script
+            print(f"Erro: {e.stderr}")
             messagebox.showerror("Error", f"Error executing script for {software}: {e}")
 
 def install_selected(softwares, check_vars):
@@ -100,4 +111,6 @@ def install_selected(softwares, check_vars):
         run_power_shell_scripts(selected_softwares)
     else:
         messagebox.showwarning("Selection Error", "No software selected.")
+
+    print(f"Selected softwares for installation: {selected_softwares}")
 
