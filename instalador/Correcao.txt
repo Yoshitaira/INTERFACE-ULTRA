@@ -1,0 +1,13 @@
+7zip OK
+Adobe não foi instalado silenciosamente
+Bullzip OK
+Chrome OK
+DesignReview OK
+DWGTrueView OK
+Earth OK
+Java OK
+Lightshot ? 
+NextCloud OK
+PDFSAM OK
+QGIS OK
+

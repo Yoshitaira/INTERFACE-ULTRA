@@ -1,11 +1,11 @@
 import sqlite3
+import hashlib
 
 def create_connection():
     conn = sqlite3.connect("SAM_DATABASE.db")
     return conn
 
 print("Conectado ao banco de dados...")
-
 
 def create_user_table():
     conn = sqlite3.connect("SAM_DATABASE.db")
@@ -40,7 +40,6 @@ def create_user_table():
     
     conn.commit()
     conn.close()
-
 create_user_table()
 
 def insert_user(username, password):
@@ -64,11 +63,13 @@ def insert_user_files(user_id, filename):
     conn.commit()
     conn.close()
 
-
-def get_user_files(user_id):
+def get_user_files(username):
     conn = create_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT filename FROM user_files WHERE user_id = ?", (user_id,))
+    cursor.execute("""SELECT uf.filename
+                   FROM user_files uf
+                   JOIN users u ON uf.user_id = u.user_id
+                   WHERE u.username= ?""", (username,))
     user_files = cursor.fetchall()
     conn.close()
     return [file[0] for file in user_files]
@@ -80,3 +81,11 @@ def get_user_id(username):
     user_id = cursor.fetchone()
     conn.close()
     return user_id[0] if user_id else None
+
+def get_user_password(username):
+    conn = create_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+    password = cursor.fetchone()
+    conn.close()
+    return password[0] if username else None

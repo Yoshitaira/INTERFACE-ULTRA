@@ -1,0 +1,71 @@
+# Função para reiniciar o script com privilégios administrativos
+function Start-ProcessAsAdmin {
+    $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$($MyInvocation.MyCommand.Path)`""
+    Start-Process powershell -ArgumentList $arguments -Verb RunAs
+    exit
+}
+
+# Verifica se o script está sendo executado como administrador
+if (-Not ([Security.Principal.WindowsIdentity]::GetCurrent().Groups -match "S-1-5-32-544")) {
+    Start-ProcessAsAdmin
+}
+
+# Configurações de log
+$logFile = "C:\Programas-Ultra\instalacao-log.txt"
+
+function Log-Message {
+    param ([string]$Message)
+    $timestamp = (Get-Date).ToString("dd-MM-yyyy HH:mm:ss")
+    "$timestamp - $Message" | Out-File -FilePath $logFile -Append -Encoding UTF8
+}
+
+# Criar diretório temporário
+$tempDir = "C:\Programas-Ultra"
+if (-Not (Test-Path $tempDir)) {
+    New-Item -ItemType Directory -Path $tempDir | Out-Null
+}
+
+# Função para baixar e instalar um programa
+function Download-And-Install {
+    param (
+        [string]$Url,
+        [string]$Nome,
+        [string]$InstallArgs = ""
+    )
+    
+    $InstallerPath = Join-Path -Path $tempDir -ChildPath $Nome
+
+    try {
+        Invoke-WebRequest -Uri $Url -OutFile $InstallerPath
+        Log-Message "Download do $Nome concluído."
+
+        # Instalando
+        Start-Process -FilePath $InstallerPath -ArgumentList $InstallArgs -Wait -NoNewWindow
+        Log-Message "Instalação do $Nome concluída com sucesso!"
+
+        # Remover instalador
+        Remove-Item -Path $InstallerPath -Force
+        Log-Message "Instalador de $Nome removido."
+    } catch {
+        Log-Message "Erro: $_"
+    }
+}
+
+# Exemplo de uso
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=7zip-x64.exe" -Nome "7zip-x64.exe" -InstallArgs "/S /D=`"C:\Program Files\7-Zip`""
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=BullzipPDFPrinter_14_4_0_2963.exe" -Nome "BullzipPDFPrinter_14_4_0_2963.exe" -InstallArgs "SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTAR"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+Download-And-Install -Url "https://fs01.ultra.com.vc/s/YW977GjgGQ2woo3/download?path=%2F&files=Adobe%20Reader%20Pt-BR.exe" -Nome "Adobe Reader Pt-BR.exe" -InstallArgs "/sALL /slf /re /msi DISABLE_FIU_CHECK=1 TRANSITION_INSTALL_MODE=3"
+# Continue adicionando outros programas da mesma forma...

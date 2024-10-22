@@ -1,8 +1,9 @@
 import ttkbootstrap as ttk
+#import time
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
-from funcoes import get_selected_files, user_register
-from databaset import get_user_files, create_user_table, get_user_id
+from funcoes import *
+from databaset import *
 from tkinter import StringVar
 from tkinter import messagebox
 
@@ -32,28 +33,40 @@ class Sistema():
     def tela_app(self):
         self.frame_app = ttk.Frame(app, width=650, height=350)
         self.frame_app.pack(pady=20, padx=20)
-        
+
         # widgets de login
-        login_label = ttk.Label(self.frame_app, font=("Helvetica", 18), text="Welcome to UltraIT Software and Applications Manager")
-        login_label.pack(side=TOP, pady=10)
+        login_label = ttk.Label(self.frame_app, font=("", 18), text=f"Welcome to UltraIT \n Software and Applications Manager", anchor=CENTER)
+        login_label.pack(pady=10)
 
         # data entry
         username_label = ttk.Label(self.frame_app, text="Username:")
         username_label.pack(pady=5)
-        self.user_entry = ttk.Entry(self.frame_app)
+        self.user_entry = StringVar()
+        self.user_entry = ttk.Entry(self.frame_app, textvariable=self.user_entry)
         self.user_entry.pack(pady=10)
 
         password_label = ttk.Label(self.frame_app, text="Password:")
         password_label.pack(pady=5)
-        self.pass_entry = ttk.Entry(self.frame_app, show="*")
+        self.pass_entry = StringVar()
+        self.pass_entry = ttk.Entry(self.frame_app, show="*", textvariable=self.user_entry)
         self.pass_entry.pack(pady=10)
 
         # buttons login or register
-        login_button = ttk.Button(self.frame_app, text="Sign in", bootstyle="primary", command=self.tela_usuario)
+        login_button = ttk.Button(self.frame_app, text="Sign in", bootstyle="primary", command=self.user_login_entry)
         login_button.pack(pady=10)
 
         register_button = ttk.Button(self.frame_app, text="Register", bootstyle="dark, outline", command=self.tela_registro)
         register_button.pack(pady=10)
+        
+    def user_login_entry(self):
+        username = self.user_entry.get()
+        password = self.pass_entry.get()
+        
+        if verify_user(username, password):
+            messagebox.showinfo("Sucesso", "Login bem-sucedido!")
+            self.tela_usuario()
+        else:
+            messagebox.showerror("Erro", "Nome de usuário ou senha incorretos.")
 
     #tela de registro
     def tela_registro(self):
@@ -130,30 +143,33 @@ class Sistema():
         user_label.grid(row=0, column=0, columnspan=2, pady=10)
 
         username = self.user_entry.get() 
-        user_id = get_user_id(username) # Obtém o nome de usuário da tela de login
-        user_files = get_user_files(user_id)  # Recupera os arquivos do banco de dados
+        #user_id = get_user_id(username) # Obtém o nome de usuário da tela de login
+        user_files = get_user_files(username)  # Recupera os arquivos do banco de dados
+        print(f"User files retrieved: {user_files}")
 
         user_label = ttk.Label(self.frame_user, font=("Helvetica", 18), text=f"Management panel for {username}")
         user_label.grid(row=0, column=0, columnspan=2, pady=10)
 
         # Adiciona checkboxes para os softwares
         self.check_vars = []
-        num_columns = 5  # Número de colunas
-        for i, software in enumerate(self.softwares):
-            var = ttk.BooleanVar(value=software in user_files)  # Marca o checkbox se o software estiver na lista
-            checkbox = ttk.Checkbutton(self.frame_user, text=software, variable=var)
+        row = 1
+        col = 0
+        for file in user_files:  # Itera apenas sobre os softwares que o usuário possui
+            var = ttk.BooleanVar(value=False)  # Checkbox marcado se está no banco
+            checkbox = ttk.Checkbutton(self.frame_user, text=file, variable=var, bootstyle="primary-square-toggle")
             self.check_vars.append(var)
+            checkbox.grid(row=row, column=col, sticky=W, padx=10, pady = 10)
 
-            # Calcula a linha e a coluna para o grid
-            row = i // num_columns  # Linha atual
-            col = i % num_columns   # Coluna atual
-            checkbox.grid(row=row + 1, column=col, sticky=W, padx=10, pady=5)
+            col += 1
+            if col == 4:  # Muda para a próxima linha após 5 colunas
+                col = 0
+                row += 1
 
         # Botões na parte inferior, centralizados
         button_frame = ttk.Frame(self.frame_user)
         button_frame.grid(row=3+10, column=0,sticky=W, columnspan=3, pady=20)
 
-        download_button = ttk.Button(button_frame, text="Install", bootstyle="primary")
+        download_button = ttk.Button(button_frame, text="Install", bootstyle="primary", command=lambda: install_selected(self.softwares, self.check_vars))
         download_button.pack(side=LEFT, padx=10)
 
         uninstall_button = ttk.Button(button_frame, text="Uninstall", bootstyle="danger")
@@ -170,5 +186,21 @@ class Sistema():
         """Esconde a tela atual."""
         for widget in self.app.winfo_children():
             widget.pack_forget()
+    
+    # def show_progress_bar(self):
+    #     if hasattr(self, 'progress_bar'):
+    #         self.progress_bar.pack_forget()
+    #     self.progress_var = ttk.IntVar()
+    #     self.progress_bar = ttk.Progressbar(self.app, variable=self.progress_var, maximum=100)
+    #     self.progress_bar.pack(pady=20, padx=20, fill=X)
+
+    # def progress_bar(self):
+    #     for i in range(101):
+    #         self.progress_var.set(i)  # Atualiza o valor da barra de progresso
+    #         self.app.update_idletasks()  # Atualiza a interface
+    #         time.sleep(0.1)  # Simula um atraso (pode ser removido em uma aplicação real)
+
+    #     self.progress_bar.pack_forget()
+
 
 Sistema()
