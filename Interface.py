@@ -1,5 +1,5 @@
 import ttkbootstrap as ttk
-#import time
+import time
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Style
 from funcoes import *
@@ -10,7 +10,7 @@ from tkinter import messagebox
 app = ttk.Window(themename='cosmo')
 
 class Sistema():
-    
+
 
     def __init__(self):
         self.app = app
@@ -93,7 +93,6 @@ class Sistema():
 
        # Lista de softwares
        
-
         # Adiciona checkboxes para os softwares
         self.check_vars = []
         for i, software in enumerate(self.softwares):
@@ -179,6 +178,8 @@ class Sistema():
         back_button.pack(side=LEFT, padx=10)
 
     def voltar_login(self):
+        self.show_progress_bar()
+        self.update_progress_bar()
         self._clear_current_frame()  # Esconde a tela atual
         self.tela_app()  # Chama a função para exibir a tela de login novamente
 
@@ -187,20 +188,21 @@ class Sistema():
         for widget in self.app.winfo_children():
             widget.pack_forget()
     
-    # def show_progress_bar(self):
-    #     if hasattr(self, 'progress_bar'):
-    #         self.progress_bar.pack_forget()
-    #     self.progress_var = ttk.IntVar()
-    #     self.progress_bar = ttk.Progressbar(self.app, variable=self.progress_var, maximum=100)
-    #     self.progress_bar.pack(pady=20, padx=20, fill=X)
+    # Mostra barra de progresso
+    def show_progress_bar(self):
+        if hasattr(self, 'progress_bar'):
+            self.progress_bar.pack_forget()
+        
+        self.progress_var = ttk.IntVar()
+        self.progress_bar = ttk.Progressbar(self.app, variable=self.progress_var, maximum=100, bootstyle="primary")
+        self.progress_bar.pack(pady=20, padx=20)
+        self.progress_bar.config(length=300)
 
-    # def progress_bar(self):
-    #     for i in range(101):
-    #         self.progress_var.set(i)  # Atualiza o valor da barra de progresso
-    #         self.app.update_idletasks()  # Atualiza a interface
-    #         time.sleep(0.1)  # Simula um atraso (pode ser removido em uma aplicação real)
-
-    #     self.progress_bar.pack_forget()
+    def update_progress_bar(self):
+        for i in range(101):
+            self.progress_var.set(i)  # Atualiza o valor da barra de progresso
+            self.app.update_idletasks()  # Atualiza a interface
+            time.sleep(0.05)  # Ajuste o tempo conforme necessário
 
 
 Sistema()

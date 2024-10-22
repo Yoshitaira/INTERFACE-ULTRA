@@ -57,18 +57,18 @@ def verify_user(username, password):
 
 # ------------------------------------- Executa scripts do powershell -------------------------
 software_scripts ={
-    "7zip": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\7zip.ps1",
-    "Adobe": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\Adobe.ps1",
-    "Bullzip": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\Bullzip.ps1",
-    "Chrome": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\Chrome.ps1",
-    "DesignReview": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\DesignReview.ps1",
-    "DWGTrueView": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\DWGTrueView.ps1",
-    "Earth": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\Earth.ps1",
-    "Java": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\Java.ps1",
-    "Lightshot": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\Lightshot.ps1",
-    "NextCloud": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\NextCloud.ps1",
-    "PDFSam": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\PDFSam.ps1",
-    "QGIS": "C:\\Users\\Paulo\\Desktop\\Pasta_base\\Python\\iNSTALADOR ULTRA\\instalador\\QGIS.ps1"   
+    "7zip": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\7zip.ps1",
+    "Adobe": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Adobe.ps1",
+    "Bullzip": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Bullzip.ps1",
+    "Chrome": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Chrome.ps1",
+    "DesignReview": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\DesignReview.ps1",
+    "DWGTrueView": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\DWGTrueView.ps1",
+    "Earth": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Earth.ps1",
+    "Java": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Java.ps1",
+    "Lightshot": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Lightshot.ps1",
+    "NextCloud": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\NextCloud.ps1",
+    "PDFSam": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\PDFSam.ps1",
+    "QGIS": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\QGIS.ps1"  
 }
 
 # Função para executar os scripts do PowerShell
