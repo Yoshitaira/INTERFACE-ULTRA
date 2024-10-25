@@ -49,10 +49,10 @@ def insert_user(username, password):
     conn.commit()
     conn.close()
 
-def insert_softwares(name):
+def insert_softwares(file_id, filename):
     conn = create_connection()
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO files (name) VALUES (?)',(name,))
+    cursor.execute('INSERT INTO files (file_id, filename) VALUES (?,?)',(file_id,filename,))
     conn.commit()
     conn.close()
 
@@ -89,3 +89,11 @@ def get_user_password(username):
     password = cursor.fetchone()
     conn.close()
     return password[0] if username else None
+
+def get_all_files():
+    conn = create_connection()
+    cursor  =conn.cursor()
+    cursor.execute("SELECT filename FROM files")
+    files = cursor.fetchall()
+    conn.close()
+    return files

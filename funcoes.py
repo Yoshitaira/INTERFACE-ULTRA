@@ -75,7 +75,7 @@ software_scripts ={
     "RocketChat": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\RocketChat.ps1",
     "Teams": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Teams.ps1",
     "TrimbleConnect": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\TrimbleConnect.ps1",
-    "Zomm": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Zoom.ps1",
+    "Zoom": "C:\\Users\\Paulo\\Desktop\\Projeto - Instalador Ultra\\instalador\\Zoom.ps1",
 }
 
 # Função para executar os scripts do PowerShell
