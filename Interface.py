@@ -6,13 +6,10 @@ from funcoes import *
 from databaset import *
 from tkinter import StringVar
 from tkinter import messagebox
-from PIL import Image, ImageTk
-from tkinter import PhotoImage
 
 app = ttk.Window(themename='cosmo')
 
 class Sistema():
-
 
     def __init__(self):
         self.app = app
@@ -33,6 +30,7 @@ class Sistema():
         self.app.title("Ultra SAM - app")
         self.app.resizable(False, False)
 
+    # Tela de login
     def tela_app(self):
         self.frame_app = ttk.Frame(app, width=650, height=350)
         self.frame_app.pack(pady=20, padx=20)
@@ -60,7 +58,7 @@ class Sistema():
 
         register_button = ttk.Button(self.frame_app, text="Register", bootstyle="dark, outline", command=self.tela_registro)
         register_button.pack(pady=10)
-        
+    
     def user_login_entry(self):
         username = self.user_entry.get()
         password = self.pass_entry.get()
@@ -71,7 +69,7 @@ class Sistema():
         else:
             messagebox.showerror("Erro", "Nome de usuário ou senha incorretos.")
 
-    #tela de registro
+    # Tela de registro
     def tela_registro(self):
         self.frame_app.pack_forget()  # Esconde a tela de login
         
@@ -178,7 +176,7 @@ class Sistema():
         back_button = ttk.Button(button_frame, text="Exit", bootstyle="dark, outline", command=self.voltar_login)
         back_button.pack(side=ttk.LEFT, padx=10)
     
-    # Tela adicionar software no caálogo de instalação
+    # Tela adicionar software no catálogo de instalação
     def tela_add(self):
         self._clear_current_frame()
         self.frame_add = ttk.Frame(app, width=650, height=350)
@@ -188,12 +186,13 @@ class Sistema():
         #user_id = get_user_id(username) # Obtém o nome de usuário da tela de login
         user_files = get_user_files(username)  # Recupera os arquivos do banco de dados
         print(f"User files retrieved: {user_files}")
+        user_id = get_user_id(username)
         #user_files = [file.strip().lower() for file in get_user_files(username)]
         user_label = ttk.Label(self.frame_add, font=("Helvetica", 18), text=f"Management panel for {username}")
         user_label.grid(row=0, column=0, columnspan=2, pady=10)
 
              # Treeview para arquivos do banco de dados
-        self.tree_db_files = ttk.Treeview(self.frame_add, columns=("filename"), show='headings')
+        self.tree_db_files = ttk.Treeview(self.frame_add, columns=("filename"), show='headings', bootstyle=('primary'))
         self.tree_db_files.heading("filename", text="ULTRA IT CATALOG")
         self.tree_db_files.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
@@ -203,7 +202,7 @@ class Sistema():
             self.tree_db_files.insert("", "end", values=file)
 
         # Treeview para arquivos do usuário
-        self.tree_user_files = ttk.Treeview(self.frame_add, columns=("filename",), show='headings')
+        self.tree_user_files = ttk.Treeview(self.frame_add, columns=("filename",), show='headings', bootstyle=('primary'))
         self.tree_user_files.heading("filename", text=f"{username} CATALOG")
         self.tree_user_files.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
 
@@ -215,39 +214,28 @@ class Sistema():
         button_frame = ttk.Frame(self.frame_add)
         button_frame.grid(row=2, column=0, columnspan=3, pady=20)
 
-        add_button = ttk.Button(button_frame, text="Add to User", bootstyle="primary")
+        add_button = ttk.Button(button_frame, text="Add to User", bootstyle="primary", command=lambda: add_to_user_catalog(self.tree_db_files, self.tree_user_files, user_id))
         add_button.pack(side=ttk.LEFT, padx=10)
 
-        remove_button = ttk.Button(button_frame, text="Remove from User", bootstyle="danger")
+        remove_button = ttk.Button(button_frame, text="Remove from User", bootstyle="danger", command=lambda:remove_from_user_catalog(self.tree_user_files, user_id))
         remove_button.pack(side=ttk.LEFT, padx=10)
 
-        back_button = ttk.Button(button_frame, text="Back", command=self.voltar_login, bootstyle="dark-outline")
+        back_button = ttk.Button(button_frame, text="Back", command=self.voltar_tela_user, bootstyle="dark-outline")
         back_button.pack(side=ttk.LEFT, padx=10)
 
         self.frame_add.columnconfigure(0, weight=1)  # Deixa a primeira coluna expandível
         self.frame_add.columnconfigure(1, weight=1)  # Deixa a segunda coluna expandível
 
-    # Tela progresso de instalação
-    # def tela_instalacao(self, selected_softwares):
-    #     self._clear_current_frame()
-    #     self.frame_install = ttk.Frame(app, width=650, height=350)
-    #     self.frame_install.pack(pady=20, padx=20)
-
-    #     install_label = ttk.Label(self.frame_install, font=("Helvetica", 18), text="Installing Softwares...")
-    #     install_label.pack(pady=10)
-
-    #     self.progress_var = ttk.IntVar()
-    #     self.progress_bar = ttk.Progressbar(self.frame_install, variable =self.progress_var, maximum=len(selected_softwares), bootstyle="primary")
-    #     self.progress_bar.pack(padx=20, pady=20)
-    #     self.progress_bar.config(length=300)
-
-    #     run_power_shell_scripts(selected_softwares, self.progress_var)
-
+    # Botões de voltar 
     def voltar_login(self):
         # self.show_progress_bar()
         # self.update_progress_bar()
         self._clear_current_frame()  # Esconde a tela atual
         self.tela_app()  # Chama a função para exibir a tela de login novamente
+    
+    def voltar_tela_user(self):
+        self._clear_current_frame()  # Esconde a tela atual
+        self.tela_usuario()  # Chama a função para exibir a tela de login novamente
 
     def _clear_current_frame(self):
         """Esconde a tela atual."""
@@ -269,14 +257,5 @@ class Sistema():
             self.progress_var.set(i)  # Atualiza o valor da barra de progresso
             self.app.update_idletasks()  # Atualiza a interface
             time.sleep(0.05)  # Ajuste o tempo conforme necessário
-
-    # def load_image(self):
-    #     image_path = "C:\Users\Paulo\Desktop\Projeto - Instalador Ultra\LOGO ULTRA.png"
-    #     img = Image.open(image_path)
-    #     img = img.resize((200, 100), Image.ANTIALIAS)  # Redimensionar a imagem se necessário
-    #     self.photo = ImageTk.PhotoImage(img)
-
-    #     self.label = ttk.Label(self.frame_app, image=self.photo)
-    #     self.label.pack()
 
 Sistema()

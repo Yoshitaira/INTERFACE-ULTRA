@@ -63,6 +63,13 @@ def insert_user_files(user_id, filename):
     conn.commit()
     conn.close()
 
+def delete_user_files(user_id, filename):
+    conn = create_connection()
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM user_files WHERE user_id = ? AND filename = ?', (user_id,filename))
+    conn.commit()
+    conn.close()
+
 def get_user_files(username):
     conn = create_connection()
     cursor = conn.cursor()

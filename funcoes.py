@@ -114,3 +114,40 @@ def install_selected(softwares, check_vars):
 
     print(f"Selected softwares for installation: {selected_softwares}")
 
+
+# ------------------------------------ Tela de catalogos --------------------------------------------
+# Função para adicionar os softwares no catalogo do cliente
+
+def add_file_to_user_catalog(user_id,filename):
+    insert_user_files(user_id,filename)
+    print(f"Added {filename} to {user_id}'s catalog.")
+
+def add_to_user_catalog(tree_db_files, tree_user_files, user_id):
+    # Obtém o item selecionado do catálogo Ultra
+    selected_item = tree_db_files.selection()
+    if not selected_item:
+        print("No file selected.")
+        return # Adiciona um aviso para o usuário se necessário
+    
+    file_to_add = tree_db_files.item(selected_item, 'values')[0]
+
+    add_file_to_user_catalog(user_id, file_to_add)
+
+    tree_user_files.insert("", "end", values=(file_to_add,))
+    print(f"File '{file_to_add}' added to user catalog.")
+
+def remove_from_user_catalog(tree_user_files, user_id):
+    selected_item = tree_user_files.selection()
+    if not selected_item:
+        print("No file selected.")
+        return
+    
+    # Obtém o nome do arquivo a ser removido
+    file_to_remove = tree_user_files.item(selected_item,'values')[0]
+
+    # Remove o arquivo do banco de dados
+    delete_user_files(user_id,file_to_remove)
+
+    # Remove o arquivo do Treeview do usuário
+    tree_user_files.delete(selected_item)
+    print(f"File '{file_to_remove}' removed from user catalog.")
